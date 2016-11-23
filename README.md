@@ -1,6 +1,7 @@
 ### stopwords_zh
 
-StopWords for Chinese: collect Chinese stopwords, Just for removing common useless words.
+StopWords for Chinese: collect Chinese stopwords, Just for removing common useless words. 
+Added traditional chinese stopwords using mafan the converter.
 
 
 #### Use
@@ -25,3 +26,25 @@ Python code:
 ### Link
 
 + [Baidu Stopwords](http://www.baiduguide.com/baidu-stopwords/)
+
+### Traditional chinese stopwords
+
+	import mafan, codecs
+	from mafan import simplify, tradify
+	stopwords = codecs.open('./simp_ch_stopwords.txt', 'r', 'utf-8').read().split(',')
+	trad_stopwords = [tradify(word).replace('\n', '').strip() for word in stopwords]
+
+### Using it with jieba on dataframe.
+
+Basically just using df.apply(lambda row: tokenizer(row), axis=1) does all the job. 
+
+def tokenizer(row):
+    if len(row.article) > 0:
+        tokenized = jieba.lcut(''.join(row.article), cut_all=True)
+        for seg in tokenized:
+            if seg not in stopwords:
+                return tokenized 
+    else:
+        return '' # np.nan if you would like to.
+
+Example: filtered['token'] = filtered.apply(lambda row: tokenizer(row), axis=1) 
