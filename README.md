@@ -1,6 +1,6 @@
 ### stopwords_zh
 
-StopWords for Chinese: collect Chinese stopwords, Just for removing common useless words. 
+StopWords for Chinese: collect Chinese stopwords, Just for removing common useless words.
 Added traditional chinese stopwords using mafan the converter.
 
 
@@ -14,7 +14,7 @@ Python code:
 	# encoding: utf-8
 	import codecs
 	import jieba
-	
+
 	if __name__ == "__main__":
 		str_in = "小明硕士毕业于中国科学院计算所，后在日本京都大学深造"
     	stopwords = codecs.open('stopwords', 'r', 'utf-8').read().split(',')
@@ -22,7 +22,7 @@ Python code:
 	    for seg in seg_list:
 	        if seg not in stopwords:
 	            print seg
-		
+
 ### Link
 
 + [Baidu Stopwords](http://www.baiduguide.com/baidu-stopwords/)
@@ -36,15 +36,15 @@ Python code:
 
 ### Using it with jieba on dataframe.
 
-Basically just using df.apply(lambda row: tokenizer(row), axis=1) does all the job. 
+Basically just using df.apply(lambda row: tokenizer(row), axis=1) does all the job.
 
-def tokenizer(row):
-    if len(row.article) > 0:
-        tokenized = jieba.lcut(''.join(row.article), cut_all=True)
-        for seg in tokenized:
-            if seg not in stopwords:
-                return tokenized 
-    else:
-        return '' # np.nan if you would like to.
+	def tokenizer(row):
+	    if len(row.article) > 0:
+	        tokenized = jieba.lcut(''.join(row.article), cut_all=True)
+	        for seg in tokenized:
+	            if seg not in stopwords:
+	                return tokenized 
+	    else:
+	        return '' # np.nan if you would like to.
 
-Example: filtered['token'] = filtered.apply(lambda row: tokenizer(row), axis=1) 
+Example: filtered['token'] = filtered.apply(lambda row: tokenizer(row), axis=1)
